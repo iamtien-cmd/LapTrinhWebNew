@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,7 +23,7 @@ import vn.iotstar.utils.Constant;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
 @WebServlet(urlPatterns = {"/admin/videos", "/admin/video/insert","/admin/video/add", "/admin/video/update","/admin/video/edit",
-		"/admin/video/delete"})
+		"/admin/video/delete", "/admin/video/findtitle"})
 public class VideoController extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	public IVideoService videoService = new VideoService();
@@ -66,7 +65,12 @@ public class VideoController extends HttpServlet{
 
 				e.printStackTrace();
 			}
-
+		}
+		else if (url.contains("findtitle")) {
+			
+			List<Video> vi = videoService.findAll();
+			req.setAttribute("videoService", vi);
+			req.getRequestDispatcher("/views/admin/video-find.jsp").forward(req, resp);
 		}
 	}
 	@Override
@@ -155,7 +159,7 @@ public class VideoController extends HttpServlet{
 		String uploadPath = Constant.UPLOAD_DIRECTORY;
 		File uploadDir = new File(uploadPath);
 		System.out.println(videoId+" "+ title +" "+fname);
-		if (uploadDir.exists()) {
+		if (!uploadDir.exists()) {
 			uploadDir.mkdir();
 		}
 		try {
@@ -185,6 +189,21 @@ public class VideoController extends HttpServlet{
 		resp.sendRedirect(req.getContextPath() + "/admin/videos");
 
 	}
+		else if (url.contains("/admin/video/findtitle")) {
+		    String findTitle = req.getParameter("findtitle");  // Lấy giá trị tìm kiếm từ request
+		   
+		    if (findTitle != null && !findTitle.trim().isEmpty()) {
+		        List<Video> listVideos = videoService.searchByName(findTitle);  // Tìm kiếm trong service
+		        req.setAttribute("listVideos", listVideos);  // Gán kết quả vào request attribute
+		        req.setAttribute("findTitle", findTitle);  // Để giữ lại giá trị tìm kiếm trên form
+		    } else {
+		        List<Video> listVideos = videoService.findAll();  // Hiển thị tất cả nếu không có từ khóa
+		        req.setAttribute("listVideos", listVideos);
+		    }
+
+		    // Chuyển hướng tới trang JSP để hiển thị kết quả
+		    req.getRequestDispatcher("/views/admin/video-find.jsp").forward(req, resp);
+		}
 	}
 
 	public static void deleteFile(String filePath) throws IOException {

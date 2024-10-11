@@ -1,8 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
-<a href="${pageContext.request.contextPath}/admin/video/insert">Add
-	video</a>
+      
+<form action="${pageContext.request.contextPath}/admin/video/findtitle" method="post">
+    <label for="findtitle">Tìm kiếm theo tên:</label>
+    <input type="text" id="findtitle" name="findtitle" value="${param.findtitle}">
+    <button type="submit">Tìm</button>
+</form>
+
+<a href="${pageContext.request.contextPath}/admin/video/insert">Add video</a>
 <table border="1" , width=100%>
 	<tr>
 		<th>STT</th>
@@ -15,6 +21,7 @@
 		<th>Status</th>
 		<th>Action</th>
 	</tr>
+	
 	<c:forEach items="${listvideo}" var="vi" varStatus="STT">
 		<tr>
 			<td>${STT.index+1 }</td>
