@@ -8,6 +8,6 @@
 </head>
 
 <body>
-	<h1>Header của Web</h1>
+	<h1>Header của Admin</h1>
 </body>
 </html>
