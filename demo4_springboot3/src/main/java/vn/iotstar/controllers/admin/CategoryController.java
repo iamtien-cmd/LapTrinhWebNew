@@ -1,4 +1,5 @@
 package vn.iotstar.controllers.admin;
+
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,15 +11,18 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import vn.iotstar.entity.Category;
 import vn.iotstar.models.CategoryModel;
-import vn.iotstar.services.ICategoryService;
+import vn.iotstar.services.CategoryService;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 @Controller
 @RequestMapping("/admin/categories")
 public class CategoryController {
-    private ICategoryService categoryService;
-    public CategoryController(ICategoryService categoryService) {
+    private CategoryService categoryService;
+    @Autowired
+    public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
     @RequestMapping("")
@@ -58,6 +62,7 @@ public class CategoryController {
         CategoryModel cateModel = new CategoryModel();
         if (optCategory.isPresent()) {
             Category entity = optCategory.get();
+
             BeanUtils.copyProperties(entity, cateModel);
             cateModel.setIsEdit(true);
             model.addAttribute("category", cateModel);
@@ -72,4 +77,5 @@ public class CategoryController {
         model.addAttribute("message", "Category is Deleted!!!");
         return new ModelAndView("forward:/admin/categories", model);
     }
+
 }

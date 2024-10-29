@@ -1,4 +1,4 @@
-package vn.iotstar.config;
+package vn.iotstar.configs;
 
 import org.sitemesh.builder.SiteMeshFilterBuilder;
 import org.sitemesh.config.ConfigurableSiteMeshFilter;
@@ -11,6 +11,4 @@ public class MySiteMeshFilter extends ConfigurableSiteMeshFilter {
                 .addExcludedPath("/login/*")
                 .addExcludedPath("/v1/api/*");
     }
-    
-    
 }
